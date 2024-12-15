@@ -1,6 +1,6 @@
 local opts = {
 	noremap = true, -- non-recursive
-	silent = true, -- do not show message
+	silent = false, -- do not show message
 }
 
 vim.g.mapleader = " "
@@ -26,9 +26,12 @@ vim.keymap.set("i", "kk", "<right>", opts)
 vim.keymap.set("i", "<C-s>", "<esc>:w<cr>", opts)
 
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<cr>", opts)
+vim.keymap.set("n", "<leader>fb", ":Telescope buffers<cr>", opts)
 vim.keymap.set("n", "<leader>fg", ":Telescope git_files<cr>", opts)
 vim.keymap.set("n", "<leader>fo", ":Telescope oldfiles<cr>", opts)
 vim.keymap.set("n", "<leader>fs", ":Telescope grep_string<cr>", opts)
+vim.keymap.set("n", "<leader>fw", "*N", opts)
+
 
 vim.keymap.set("n", "<f5>", ":!make<cr>", opts)
 
@@ -39,3 +42,7 @@ if vim.g.neovide then
     vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
     vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
 end
+
+vim.keymap.set("n", "gt", ":bnext<cr>", opts)
+vim.keymap.set("n", "gT", ":bprevious<cr>", opts)
+
