@@ -140,3 +140,7 @@ lspconfig.clangd.setup({
 lspconfig.hls.setup({
 	on_attach = on_attach,
 })
+
+lspconfig.glsl_analyzer.setup({
+	on_attach = on_attach,
+})

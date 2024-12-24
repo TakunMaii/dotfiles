@@ -86,15 +86,20 @@ require("lazy").setup({
 		branch = "0.1.x",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
+    -- love2d supprt (https://love2d.org)
 	{
 		"S1M0N38/love2d.nvim",
 	},
-	{
-		"rmagatti/auto-session",
-		lazy = false,
-		opts = {
-			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-			-- log_level = 'debug',
-		},
-	},
+    -- multiple cursor
+    {
+        "mg979/vim-visual-multi"
+    },
+    -- glsl highlight
+    {
+        'tikhomirov/vim-glsl',
+    },
+    -- copilot
+    {
+        'github/copilot.vim'
+    }
 })

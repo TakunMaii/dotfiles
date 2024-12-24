@@ -30,6 +30,8 @@ vim.opt.smartcase = true -- but make it case sensitive if an uppercase is entere
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- vim.opt.shell = "powershell"
+
 vim.api.nvim_create_autocmd({"FileType"}, {
     pattern = {"c", "cpp", "md", "txt", "c.snippets", "cpp.snippets"},
     callback = function()
@@ -39,5 +41,15 @@ vim.api.nvim_create_autocmd({"FileType"}, {
         vim.opt_local.shiftwidth = 2
         vim.opt_local.softtabstop = 2
     end,
+})
+
+vim.diagnostic.config({
+    virtual_text = {
+        severity = { min = vim.diagnostic.severity.WARN }, -- 最低显示 Warning
+    },
+    signs = true, -- 显示边栏符号
+    underline = true, -- 高亮问题代码
+    update_in_insert = false, -- 插入模式不更新诊断
+    severity_sort = true, -- 根据严重性排序
 })
 
