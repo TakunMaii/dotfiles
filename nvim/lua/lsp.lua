@@ -22,13 +22,17 @@ require("mason-lspconfig").setup({
 --     - on_attach: a lua callback function to run after LSP attaches to a given buffer.
 local lspconfig = require("lspconfig")
 
+lspconfig.clangd.setup({
+    cmd = { "clangd", "--offset-encoding=UTF-8" },
+})
+
 -- Customized on_attach function.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions.
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, opts)
+vim.keymap.set("n", "<space>do", vim.diagnostic.open_float, opts)
+vim.keymap.set("n", "<space>dp", vim.diagnostic.goto_prev, opts)
+vim.keymap.set("n", "<space>dn", vim.diagnostic.goto_next, opts)
+vim.keymap.set("n", "<space>ds", vim.diagnostic.setloclist, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer.

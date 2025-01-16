@@ -28,13 +28,13 @@ inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#prev(0) : "\<S-Tab>"
 nnoremap <expr> <c-d> coc#float#has_scroll() ? coc#float#scroll(1, 1) : "\<c-d>"
 nnoremap <expr> <c-u> coc#float#has_scroll() ? coc#float#scroll(0, 1) : "\<c-u>"
 
-nmap <space>d <Plug>(coc-definition)
+nmap gd <Plug>(coc-definition)
 nmap <space>r <Plug>(coc-references)
 nmap <space>t <Plug>(coc-type-definition)
-nmap <space>i <Plug>(coc-implementation)
+nmap gi <Plug>(coc-implementation)
 nmap <space>2 <Plug>(coc-rename)
-nmap <space>h <Plug>(coc-diagnostic-prev)
-nmap <space>l <Plug>(coc-diagnostic-next)
+nmap <space>dj <Plug>(coc-diagnostic-prev)
+nmap <space>dk <Plug>(coc-diagnostic-next)
 nmap <M-F> <Plug>(coc-format)
 
 nnoremap <space>fs :Rg<cr>
@@ -48,7 +48,6 @@ nnoremap <space>q :q<cr>
 nnoremap <c-s> :w<cr>
 inoremap <c-s> <esc>:w<cr>
 inoremap jj <esc>
-inoremap kk <right>
 nnoremap <F5> :!make<cr>
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k

@@ -20,10 +20,10 @@ vim.keymap.set("n", "<C-s>", ":w<cr>", opts)
 
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
 vim.keymap.set("n", "<leader>t", ":terminal<cr>", opts)
-vim.keymap.set("n", "<leader>q", ":q!<cr>", opts)
+vim.keymap.set("n", "<leader>q", ":q<cr>", opts)
 
 vim.keymap.set("i", "jj", "<esc>", opts)
-vim.keymap.set("i", "kk", "<right>", opts)
+vim.keymap.set("i", "<C-l>", "<right>", opts)
 vim.keymap.set("i", "<C-s>", "<esc>:w<cr>", opts)
 
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<cr>", opts)
