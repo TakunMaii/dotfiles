@@ -86,20 +86,27 @@ require("lazy").setup({
 		branch = "0.1.x",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-    -- love2d supprt (https://love2d.org)
+	-- love2d supprt (https://love2d.org)
 	{
 		"S1M0N38/love2d.nvim",
 	},
-    -- multiple cursor
-    {
-        "mg979/vim-visual-multi"
-    },
-    -- glsl highlight
-    {
-        'tikhomirov/vim-glsl',
-    },
-    -- copilot
-    {
-        'github/copilot.vim'
-    }
+	-- multiple cursor
+	{
+		"mg979/vim-visual-multi",
+	},
+	-- glsl highlight
+	{
+		"tikhomirov/vim-glsl",
+	},
+	-- copilot
+	{
+		"github/copilot.vim",
+	},
+	-- Unreal Engine
+	{
+		"TakunMaii/unrealmine.nvim",
+		dependencies = {
+			"tpope/vim-dispatch",
+		},
+	},
 })
