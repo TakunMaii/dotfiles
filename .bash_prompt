@@ -1,0 +1,29 @@
+force_color_prompt=yes
+
+function prompt_command() {
+    local last_exit_code=$?
+    local time_color="\[\e[36m\]"
+    local user_color="\[\e[32m\]"
+    local host_color="\[\e[34m\]"
+    local dir_color="\[\e[33m\]"
+    local git_color="\[\e[35m\]"
+    local reset_color="\[\e[0m\]"
+
+    local status_indicator=""
+    [ $last_exit_code -eq 0 ] && status_indicator="" || status_indicator=" ERROR|"
+
+    local current_time="${time_color}At \t"
+
+    local user_host="$user_color\u@\h"
+
+    local current_dir="$dir_color\w"
+
+    local git_branch=""
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        git_branch="$git_color \$(git branch --show-current 2>/dev/null)"
+    fi
+
+    PS1="${current_time} ${user_host}:${current_dir}${git_branch}${reset_color}\n\$ "
+}
+
+PROMPT_COMMAND=prompt_command
