@@ -8,6 +8,7 @@ set fileencodings=utf-8,latin-1,chinese,gbk,gb2312,gb18030 encoding=utf-8 langme
 set statusline=%<%f\ %=%y\ %l/%L\ %p%%
 set backspace=indent,eol,start
 set completeopt=menuone,noinsert
+set nowrap
 syntax on
 let &titleold=getcwd() " Save the old title
 
@@ -20,6 +21,8 @@ Plug 'github/copilot.vim'
 Plug 'morhetz/gruvbox'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'preservim/nerdtree'
 call plug#end()
 
 " coc settings
@@ -42,7 +45,7 @@ nmap gi <Plug>(coc-implementation)
 nmap <space>2 <Plug>(coc-rename)
 nmap <space>dj <Plug>(coc-diagnostic-prev)
 nmap <space>dk <Plug>(coc-diagnostic-next)
-nmap <M-F> <Plug>(coc-format)
+nmap <space>fd <Plug>(coc-format)
 
 " gruvbox dark mode
 colorscheme gruvbox
@@ -59,7 +62,7 @@ nnoremap <space>ff :FZF<cr>
 " useful mappings
 nnoremap <space>b :buffers<cr>:b<space>
 nnoremap <space>s :b#<cr>
-nnoremap <space>e :Vexplore<cr>
+nnoremap <space>e :NERDTreeToggle<cr>
 nnoremap <space>w :w<cr>
 nnoremap <space>q :q<cr>
 nnoremap <c-s> :w<cr>
