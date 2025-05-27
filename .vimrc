@@ -68,8 +68,9 @@ nnoremap <space>q :q<cr>
 nnoremap <c-s> :w<cr>
 inoremap <c-s> <esc>:w<cr>
 inoremap jj <esc>
+inoremap kk <right>
 nnoremap <F5> :!make<cr>
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
+nnoremap <space>m `
