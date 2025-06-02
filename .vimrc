@@ -23,6 +23,7 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'preservim/nerdtree'
+Plug 'puremourning/vimspector'
 call plug#end()
 
 " coc settings
@@ -58,6 +59,15 @@ inoremap <silent><expr> <c-y> exists('b:_copilot.suggestions') ? copilot#Accept(
 " fzf settings
 nnoremap <space>fs :Rg<cr>
 nnoremap <space>ff :FZF<cr>
+
+" vimspector settings
+nnoremap <space>dl :call vimspector#Launch()<cr>
+nnoremap <space>dc :call vimspector#Continue()<cr>
+nnoremap <space>do :call vimspector#StepOver()<cr>
+nnoremap <space>di :call vimspector#StepInto()<cr>
+nnoremap <space>do :call vimspector#StepOut()<cr>
+nnoremap <space>dr :call vimspector#Restart()<cr>
+nnoremap <space>db :call vimspector#ToggleBreakpoint()<cr>
 
 " useful mappings
 nnoremap <space>b :buffers<cr>:b<space>
