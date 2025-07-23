@@ -15,6 +15,7 @@ set $mod Mod4
 # is used in the bar {} block below.
 font simhei 16
 font simsun 16
+font pango: DejaVu Sans Mono, Font Awesome 5 Free 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -65,6 +66,9 @@ tiling_drag modifier titlebar
 # start a terminal
 bindsym $mod+Return exec xfce4-terminal
 
+# take a screenshot
+bindsym $mod+Shift+s exec flameshot gui
+
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -110,7 +114,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+c layout stacking
 bindsym $mod+Shift+t layout tabbed
 bindsym $mod+Shift+p layout toggle split
 
@@ -170,7 +174,7 @@ bindsym $mod+Tab workspace next
 bindsym Alt+Tab focus right
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -206,8 +210,14 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 bar {
-        status_command i3status
+        position bottom
+        status_command i3blocks
+        font pango: DejaVu Sans Mono, Font Awesome 5 Free 10
+        colors {
+          background #2d2d2d
+          statusline #ffffff
+          separator #666666
+        }
 }
+

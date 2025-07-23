@@ -1,0 +1,32 @@
+separator_block_width=15
+markup=none
+
+[greeting]
+command=~/develop/ShellScripts/greeting/greeting.sh
+interval=120
+
+[weather]
+command=curl -Ss 'https://wttr.in?0&T&Q' | cut -c 16- | head -2 | xargs echo
+interval=3600
+color=#A4C2F4
+
+[battery]
+command=~/.config/i3blocks/battery.sh
+interval=10
+
+[memory]
+command=~/.config/i3blocks/memory.sh
+interval=10
+
+[cpu]
+command=~/.config/i3blocks/cpu.sh
+interval=10
+
+[volume]
+command=~/.config/i3blocks/volume.sh
+interval=10
+
+[time]
+command=date '+%H:%M:%S %Y/%m/%d'
+interval=5
+
