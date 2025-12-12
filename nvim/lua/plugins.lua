@@ -102,11 +102,4 @@ require("lazy").setup({
 	{
 		"github/copilot.vim",
 	},
-	-- Unreal Engine
-	{
-		"TakunMaii/unrealmine.nvim",
-		dependencies = {
-			"tpope/vim-dispatch",
-		},
-	},
 })

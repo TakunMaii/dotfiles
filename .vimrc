@@ -1,7 +1,7 @@
 " basic vim settings
 set nocompatible smartindent nostartofline
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
-set number relativenumber
+set number
 set termguicolors
 set title ruler belloff=all laststatus=1
 set fileencodings=utf-8,latin-1,chinese,gbk,gb2312,gb18030 encoding=utf-8 langmenu=none
@@ -10,7 +10,12 @@ set backspace=indent,eol,start
 set completeopt=menuone,noinsert
 set nowrap
 syntax on
+filetype plugin indent on
 let &titleold=getcwd() " Save the old title
+
+" set leader
+let mapleader=" "
+let maplocalleader=" "
 
 " vim-plug settings
 call plug#begin()
@@ -23,8 +28,24 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'preservim/nerdtree'
-Plug 'puremourning/vimspector'
+Plug 'tpope/vim-commentary'
+Plug 'lervag/vimtex'
 call plug#end()
+
+" vimtex config
+let g:Tex_IgnoredWarnings = 
+	\'Underfull'."\n".
+	\'Overfull'."\n".
+	\'specifier changed to'."\n".
+	\'You have requested'."\n".
+	\'Missing number, treated as zero.'."\n".
+	\'There were undefined references'."\n".
+	\'Citation %.%# undefined'."\n".
+	\"LaTeX hooks Warning"
+let g:Tex_IgnoreLevel = 8
+let g:Tex_GotoError = 0
+let g:vimtex_quickfix_open_on_warning=0
+let g:vimtex_view_general_viewer = 'SumatraPDF'
 
 " coc settings
 inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>"
@@ -59,15 +80,7 @@ inoremap <silent><expr> <c-y> exists('b:_copilot.suggestions') ? copilot#Accept(
 " fzf settings
 nnoremap <space>fs :Rg<cr>
 nnoremap <space>ff :FZF<cr>
-
-" vimspector settings
-nnoremap <space>dl :call vimspector#Launch()<cr>
-nnoremap <space>dc :call vimspector#Continue()<cr>
-nnoremap <space>do :call vimspector#StepOver()<cr>
-nnoremap <space>di :call vimspector#StepInto()<cr>
-nnoremap <space>do :call vimspector#StepOut()<cr>
-nnoremap <space>dr :call vimspector#Restart()<cr>
-nnoremap <space>db :call vimspector#ToggleBreakpoint()<cr>
+nnoremap <space>fb :Buffers<cr>
 
 " useful mappings
 nnoremap <space>b :buffers<cr>:b<space>
@@ -83,4 +96,5 @@ nnoremap <F5> :!make<cr>
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
 nnoremap <space>m `

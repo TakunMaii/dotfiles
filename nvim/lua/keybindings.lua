@@ -23,7 +23,6 @@ vim.keymap.set("n", "<leader>t", ":terminal<cr>", opts)
 vim.keymap.set("n", "<leader>q", ":q<cr>", opts)
 
 vim.keymap.set("i", "jj", "<esc>", opts)
-vim.keymap.set("i", "<C-l>", "<right>", opts)
 vim.keymap.set("i", "<C-s>", "<esc>:w<cr>", opts)
 
 vim.keymap.set("n", "<leader>ff", ":Telescope find_files<cr>", opts)
@@ -33,7 +32,7 @@ vim.keymap.set("n", "<leader>fo", ":Telescope oldfiles<cr>", opts)
 vim.keymap.set("n", "<leader>fs", ":Telescope grep_string<cr>", opts)
 vim.keymap.set("n", "<leader>fw", "*N", opts)
 
-vim.keymap.set("n", "<f5>", ":!make<cr>", opts)
+-- vim.keymap.set("n", "<f5>", ":!make<cr>", opts)
 
 vim.keymap.set("n", "<leader>s", ":%s/", opts)
 
