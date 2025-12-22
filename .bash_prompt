@@ -23,7 +23,7 @@ function prompt_command() {
         git_branch="$git_color \$(git branch --show-current 2>/dev/null)"
     fi
 
-    PS1="${current_time} ${user_host}:${current_dir}${git_branch}${reset_color}\n\$ "
+    PS1="${user_host}:${current_dir}${git_branch}${reset_color}\n\$ "
 }
 
 PROMPT_COMMAND=prompt_command
