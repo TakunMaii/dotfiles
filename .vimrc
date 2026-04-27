@@ -29,6 +29,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'lervag/vimtex'
+Plug 'github/copilot.vim'
 call plug#end()
 
 " vimtex config
@@ -96,4 +97,3 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
-nnoremap <space>m `
