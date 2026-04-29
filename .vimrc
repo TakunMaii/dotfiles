@@ -3,7 +3,7 @@ set nocompatible smartindent nostartofline
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set number
 set termguicolors
-set title ruler belloff=all laststatus=1
+set title ruler belloff=all laststatus=2
 set fileencodings=utf-8,latin-1,chinese,gbk,gb2312,gb18030 encoding=utf-8 langmenu=none
 set statusline=%<%f\ %=%y\ %l/%L\ %p%%
 set backspace=indent,eol,start
@@ -33,15 +33,15 @@ Plug 'github/copilot.vim'
 call plug#end()
 
 " vimtex config
-let g:Tex_IgnoredWarnings = 
-	\'Underfull'."\n".
-	\'Overfull'."\n".
-	\'specifier changed to'."\n".
-	\'You have requested'."\n".
-	\'Missing number, treated as zero.'."\n".
-	\'There were undefined references'."\n".
-	\'Citation %.%# undefined'."\n".
-	\"LaTeX hooks Warning"
+let g:Tex_IgnoredWarnings =
+        \'Underfull'."\n".
+        \'Overfull'."\n".
+        \'specifier changed to'."\n".
+        \'You have requested'."\n".
+        \'Missing number, treated as zero.'."\n".
+        \'There were undefined references'."\n".
+        \'Citation %.%# undefined'."\n".
+        \"LaTeX hooks Warning"
 let g:Tex_IgnoreLevel = 8
 let g:Tex_GotoError = 0
 let g:vimtex_quickfix_open_on_warning=0
@@ -88,12 +88,32 @@ nnoremap <space>s :b#<cr>
 nnoremap <space>e :NERDTreeToggle<cr>
 nnoremap <space>w :w<cr>
 nnoremap <space>q :q<cr>
+nnoremap <space>t :term<cr>
 nnoremap <c-s> :w<cr>
 inoremap <c-s> <esc>:w<cr>
 inoremap jj <esc>
 inoremap kk <right>
-nnoremap <F5> :!make<cr>
+nnoremap <F5> :!make<space>
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
+
+" c header command
+function! InsertHeaderGuard()
+    let l:fname = expand('%:t:r')
+    let l:guard = toupper(l:fname)
+    let l:guard = substitute(l:guard, '[^A-Z0-9]', '_', 'g')
+    let l:guard .= '_H'
+    let l:lines = [
+                \ '#ifndef ' . l:guard,
+                \ '#define ' . l:guard,
+                \ '',
+                \ '#endif /* ' . l:guard . ' */'
+                \ ]
+
+    call append(0, l:lines)
+    execute 'normal! gg3j'
+endfunction
+
+command! Cheader call InsertHeaderGuard()
