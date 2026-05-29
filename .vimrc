@@ -24,11 +24,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'morhetz/gruvbox'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
-Plug 'lervag/vimtex'
 Plug 'github/copilot.vim'
 call plug#end()
 
