@@ -1,0 +1,77 @@
+" =========================
+" GUI 外观精简
+" =========================
+
+" 隐藏菜单栏
+set guioptions-=m
+
+" 隐藏工具栏
+set guioptions-=T
+
+" 隐藏右侧滚动条
+set guioptions-=r
+
+" 隐藏左侧滚动条
+set guioptions-=L
+
+" 隐藏底部滚动条
+set guioptions-=b
+
+" 不显示标签页（可选）
+set guioptions-=e
+
+" 禁止 GUI 标签
+set guioptions+=c
+
+" 隐藏窗口标题（Windows 下尽量）
+set title
+set titlestring=
+
+" 禁用启动画面
+set shortmess+=I
+
+" =========================
+" 字体设置（重点）
+" =========================
+"
+" CaskaydiaCove NFM = Caskaydia Cove Nerd Font Mono
+" Windows GVim 字体名必须严格匹配
+"
+if has('gui_running')
+  if has('gui_win32')
+    set guifont=CaskaydiaCove_NFM:h14
+  endif
+endif
+
+" =========================
+" 编辑器行为
+" =========================
+
+" 禁止光标闪烁
+set guicursor=a:blinkon0
+
+" 禁止 GUI 标签页
+set showtabline=0
+
+" 行号
+set number
+set relativenumber
+
+" 语法高亮
+syntax on
+
+" 去掉 GUI 提示音
+set visualbell
+set noerrorbells
+
+" 鼠标支持
+set mouse=a
+
+" 防止右键菜单
+set mousemodel=popup
+
+" =========================
+" 窗口大小
+" =========================
+set lines=40
+set columns=120
