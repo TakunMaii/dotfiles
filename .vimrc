@@ -24,34 +24,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'morhetz/gruvbox'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
-Plug 'github/copilot.vim'
 call plug#end()
-
-" vimtex config
-let g:Tex_IgnoredWarnings =
-        \'Underfull'."\n".
-        \'Overfull'."\n".
-        \'specifier changed to'."\n".
-        \'You have requested'."\n".
-        \'Missing number, treated as zero.'."\n".
-        \'There were undefined references'."\n".
-        \'Citation %.%# undefined'."\n".
-        \"LaTeX hooks Warning"
-let g:Tex_IgnoreLevel = 8
-let g:Tex_GotoError = 0
-let g:vimtex_quickfix_open_on_warning=0
-let g:vimtex_view_general_viewer = 'SumatraPDF'
 
 " gruvbox dark mode
 colorscheme gruvbox
 set background=dark
-
-" copilot settings
-let g:copilot_no_tab_map = v:true
-inoremap <silent><expr> <c-y> exists('b:_copilot.suggestions') ? copilot#Accept("\<CR>") : "\<c-y>"
 
 " fzf settings
 nnoremap <space>fs :Rg<cr>
