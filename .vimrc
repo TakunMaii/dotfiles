@@ -43,7 +43,7 @@ nnoremap <space>s :b#<cr>
 nnoremap <space>e :NERDTreeToggle<cr>
 nnoremap <space>w :w<cr>
 nnoremap <space>q :q<cr>
-nnoremap <space>t :term<cr>
+nnoremap <space>t :botright vert term<cr>
 nnoremap <c-s> :w<cr>
 inoremap <c-s> <esc>:w<cr>
 inoremap jj <esc>
