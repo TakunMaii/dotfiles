@@ -4,6 +4,7 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 
 vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- 前缀键
 vim.g.mapleader = ' '
@@ -12,6 +13,7 @@ vim.g.maplocalleader = ' '
 -- 插件列表
 vim.pack.add({
   { src = 'https://github.com/morhetz/gruvbox' },
+  { src = 'https://github.com/vim-airline/vim-airline' },
   { src = 'https://github.com/windwp/nvim-autopairs' },
   { src = 'https://github.com/mg979/vim-visual-multi' },
   { src = 'https://github.com/nvim-tree/nvim-tree.lua' },
@@ -28,7 +30,7 @@ require("nvim-autopairs").setup()
 vim.lsp.config('clangd', {
 	cmd = {'clangd'},
 	filetypes = {'c', 'cpp'},
-	root_markers = {'.clangd', 'compile_commands.json'}
+	root_markers = {'.clangd', '.git'}
 })
 vim.lsp.config('lua_ls', {
   cmd = { 'lua-language-server' },
@@ -43,7 +45,12 @@ vim.lsp.config('ols', {
 	cmd = {'ols'},
 	filetypes = {'odin'},
 })
-vim.lsp.enable({'clangd', 'lua_ls', 'pyright', 'ols'})
+vim.lsp.config('rust-analyzer', {
+	cmd = {'rust-analyzer'},
+	filetypes = {'rust'},
+	root_markers = {'Cargo.toml', 'Cargo.lock', '.git'}
+})
+vim.lsp.enable({'clangd', 'lua_ls', 'pyright', 'ols', 'rust-analyzer'})
 vim.o.autocomplete = true
 vim.api.nvim_create_autocmd('LspAttach', {
 	callback = function(ev)
@@ -71,38 +78,44 @@ vim.diagnostic.config({
   update_in_insert = false,
   severity_sort = true,
 })
-vim.keymap.set("i", "<Tab>", function()
-  if vim.fn.pumvisible() == 1 then
-    return "<C-n>"
-  else
-    return "<Tab>"
-  end
-end, { expr = true, desc = "Next completion item or normal Tab" })
 
-vim.keymap.set("i", "<C-Tab>", function()
-  if vim.fn.pumvisible() == 1 then
-    return "<C-p>"
-  else
-    return "<C-Tab>"
-  end
-end, { expr = true, desc = "Prev completion item or normal C-Tab" })
-vim.keymap.set("i", "<Enter>", function()
-  if vim.fn.pumvisible() == 1 then
-    return "<C-y>"
-  else
-    return "<Enter>"
-  end
-end, { expr = true, desc = "Enter to confirm choice or normal Enter" })
-
-vim.cmd('colorscheme gruvbox')
+-- colorscheme
 vim.opt.background = 'dark'
+vim.g.gruvbox_italicize_strings = 1
+vim.cmd('colorscheme gruvbox')
 
+-- airline config
+vim.g.airline_powerline_fonts = 1
+vim.g.airline_section_warning = ''
+vim.g.airline_section_error = ''
+vim.g.airline_section_z = '%l:%c'
+vim.cmd('let g:airline#extensions#tabline#enabled = 1')
+vim.cmd('hi StatusLine cterm=NONE gui=NONE')
+vim.cmd('hi TabLine cterm=NONE gui=NONE')
+vim.cmd('hi WinBar cterm=NONE gui=NONE')
+
+-- noh when cursor moved
+vim.api.nvim_create_autocmd("CursorMoved", {
+  pattern = "*",
+  callback = function()
+    if vim.v.hlsearch == 1 and vim.fn.mode() == "n" then
+      vim.schedule(function()
+        vim.cmd("noh")
+      end)
+    end
+  end,
+})
+
+-- keymaps
 local map = vim.keymap.set
+map('n', 'gD', vim.lsp.buf.declaration, {})
+map('n', 'gd', vim.lsp.buf.definition, {})
+
 map("n", "<leader>ff", ":Telescope find_files<CR>")
 map("n", "<leader>fs", ":Telescope live_grep<CR>")
 map("n", "<leader>fb", ":Telescope buffers<CR>")
 
--- 常用快捷键
+-- my own keymaps
 map('n', '<space>b', ':buffers<CR>:b ')
 map('n', '<space>s', '<cmd>b#<CR>')
 map('n', '<space>e', '<cmd>NvimTreeToggle<CR>')
@@ -117,3 +130,26 @@ map('n', '<C-j>', '<C-w>j')
 map('n', '<C-k>', '<C-w>k')
 map('n', '<C-h>', '<C-w>h')
 map('n', '<C-l>', '<C-w>l')
+
+-- 废弃使用的快捷键
+-- vim.keymap.set("i", "<Tab>", function()
+--   if vim.fn.pumvisible() == 1 then
+--     return "<C-n>"
+--   else
+--     return "<Tab>"
+--   end
+-- end, { expr = true, desc = "Next completion item or normal Tab" })
+-- vim.keymap.set("i", "<C-Tab>", function()
+--   if vim.fn.pumvisible() == 1 then
+--     return "<C-p>"
+--   else
+--     return "<C-Tab>"
+--   end
+-- end, { expr = true, desc = "Prev completion item or normal C-Tab" })
+-- vim.keymap.set("i", "<Enter>", function()
+--   if vim.fn.pumvisible() == 1 then
+--     return "<C-y>"
+--   else
+--     return "<Enter>"
+--   end
+-- end, { expr = true, desc = "Enter to confirm choice or normal Enter" })
