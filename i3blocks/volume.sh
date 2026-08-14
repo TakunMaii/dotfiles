@@ -2,6 +2,6 @@
 
 volume=$(amixer get Master | grep -oP '\d+%' | head -n 1 | tr -d '%')
 
-echo "VOL: $volume%"
+echo "   $volume%"
 
 exit 0

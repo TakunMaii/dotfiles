@@ -40,17 +40,17 @@ exec --no-startup-id nm-applet
 exec --no-startup-id fcitx5
 
 # Wallpaper
-exec --no-startup-id feh --bg-fill ~/.config/wallpaper.jpg
+exec --no-startup-id feh --bg-fill ~/.config/wallpaper.png
 
 # picom
 exec --no-startup-id picom --config ~/.config/picom.conf
 
 # Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+set $refresh_i3blocks pkill -RTMIN+1 i3blocks
+bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0 && $refresh_i3blocks
+bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- && $refresh_i3blocks
+bindsym XF86AudioMute        exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && $refresh_i3blocks
+bindsym XF86AudioMicMute     exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && $refresh_i3blocks
 
 # Control the brightness of your screen using the XF86MonBrightnessUp 
 bindsym XF86MonBrightnessUp exec --no-startup-id light -A 10
@@ -64,7 +64,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec xfce4-terminal
+bindsym $mod+Return exec alacritty
 
 # take a screenshot
 bindsym $mod+Shift+s exec flameshot gui
@@ -213,7 +213,7 @@ bindsym $mod+r mode "resize"
 bar {
         position bottom
         status_command i3blocks
-        font pango: DejaVu Sans Mono, Font Awesome 5 Free 10
+        font pango: CaskaydiaCode NFM, Font Awesome 5 Free 10
         colors {
           background #2d2d2d
           statusline #ffffff
