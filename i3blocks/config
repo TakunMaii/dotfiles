@@ -1,6 +1,10 @@
 separator_block_width=15
 markup=none
 
+[saying]
+command=echo "彻底的唯物主义是无所畏惧"
+interval=once
+
 [network]
 command=~/.config/i3blocks/network.sh
 interval=once

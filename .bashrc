@@ -67,6 +67,7 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 alias s='fastfetch'
+alias vim='nvim'
 
 if [ -f ~/.bash_prompt ]; then
     . ~/.bash_prompt
@@ -82,3 +83,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# uv
+export PATH="/home/maii/.local/bin:$PATH"
