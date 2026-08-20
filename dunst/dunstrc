@@ -1,0 +1,106 @@
+# ~/.config/dunst/dunstrc
+# 现代卡片风：圆角 + 半透明 + 左边框色条 + 图标 + 动态宽度
+# 依赖：dunst >= 1.7，X11 下建议跑 picom 做真正毛玻璃（dunst 自身只做透明）
+
+[global]
+    # 位置：右上角，距边 16px
+    monitor = 0
+    follow = none
+    origin = top-right
+    offset = (16, 16)
+
+    # 宽度动态扩展，最大 420px（窄屏不会撑爆）
+    width = (0, 420)
+    height = (0, 200)
+    notification_limit = 8
+    indicate_hidden = yes
+
+    # 字体（换成你系统有的 Nerd Font / 等宽）
+    font = "CaskaydiaCove NFM 12"
+    line_height = 0
+    markup = full
+
+    # 卡片内边距与间距（gap 需要 compositor）
+    padding = 12
+    horizontal_padding = 14
+    text_icon_padding = 10
+    gap_size = 10
+    separator_height = 0
+    frame_width = 0
+
+    # 圆角
+    corner_radius = 14
+    progress_bar_corner_radius = 4
+    icon_corner_radius = 4
+
+    # 半透明背景（X11 用 transparency 百分比；Wayland 用 #RRGGBBAA）
+    transparency = 12
+
+    # 图标
+    enable_recursive_icon_lookup = true
+    icon_theme = "Papirus-Dark, Adwaita"
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 48
+
+    # 文本格式：粗体标题 + 正文
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    ellipsize = middle
+    show_age_threshold = 60
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = yes
+    ignore_newline = no
+
+    # 进度条（音量/亮度/下载用）
+    progress_bar = true
+    progress_bar_height = 6
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 160
+    progress_bar_max_width = 300
+
+    # 历史与交互
+    sticky_history = yes
+    history_length = 30
+    dmenu = /usr/bin/dmenu -p dunst:
+    browser = /usr/bin/xdg-open
+    title = Dunst
+    class = Dunst
+
+    # 鼠标：左键关、右键全关、中键执行 action
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#1e2030"   # Macchiato base (半透明靠 global transparency)
+    foreground = "#a5adce"
+    timeout = 6
+    # 左侧细色条用 frame 模拟
+    frame_width = 3
+    frame_color = "#51576d"
+
+[urgency_normal]
+    background = "#24273a"
+    foreground = "#cad3f5"
+    timeout = 8
+    frame_width = 3
+    frame_color = "#8aadf4"
+
+[urgency_critical]
+    background = "#2e2433"
+    foreground = "#f4dbd6"
+    timeout = 5            # 不自动消失
+    frame_width = 3
+    frame_color = "#ed8796"
+
+# 可选：全屏时仍弹出（看视频/游戏有用）
+[fullscreen]
+    fullscreen = show
+
+# 可选：来自音量脚本的进度条通知，去掉图标避免重影
+[volume]
+    appname = dunstify
+    format = "%s\n%b"
