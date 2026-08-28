@@ -20,11 +20,103 @@ vim.pack.add({
   { src = 'https://github.com/tpope/vim-commentary' },
   { src = 'https://github.com/nvim-telescope/telescope.nvim' },
   { src = 'https://github.com/nvim-lua/plenary.nvim' },
+  { src = 'https://github.com/Saghen/blink.cmp', version = vim.version.range('1.*') },
+  { src = 'https://github.com/rafamadriz/friendly-snippets' },
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
 })
 
 -- setup as it requires
 require("nvim-tree").setup()
 require("nvim-autopairs").setup()
+local treesitter_langs = {
+  "c",
+  "cpp",
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "python",
+  "rust",
+  "zig",
+}
+require("nvim-treesitter").setup()
+require("nvim-treesitter").install(treesitter_langs)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = treesitter_langs,
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})
+require("blink.cmp").setup({
+  keymap = {
+    preset = "default",
+    ["<CR>"] = { "accept", "fallback" },
+  },
+  appearance = {
+    nerd_font_variant = "mono",
+  },
+  completion = {
+    documentation = {
+      auto_show = true,
+      auto_show_delay_ms = 250,
+      treesitter_highlighting = true,
+      window = {
+        border = "rounded",
+      },
+    },
+    ghost_text = {
+      enabled = true,
+    },
+    menu = {
+      border = "rounded",
+      draw = {
+        columns = {
+          { "kind_icon" },
+          { "label", "label_description", gap = 1 },
+          { "source_name" },
+        },
+      },
+    },
+  },
+  signature = {
+    enabled = true,
+    window = {
+      border = "rounded",
+      treesitter_highlighting = true,
+    },
+  },
+  sources = {
+    default = { "lsp", "path", "snippets", "buffer" },
+  },
+  fuzzy = {
+    implementation = "lua",
+  },
+})
+local function hide_blink_float_chrome()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local filetype = vim.bo[buf].filetype
+    if filetype:match("^blink%-cmp") then
+      local config = vim.api.nvim_win_get_config(win)
+      if config.relative ~= "" then
+        config.style = "minimal"
+        pcall(vim.api.nvim_win_set_config, win, config)
+        vim.wo[win].statusline = " "
+        vim.wo[win].winbar = ""
+      end
+    end
+  end
+end
+vim.api.nvim_create_autocmd({ "WinNew", "WinEnter" }, {
+  callback = function()
+    vim.schedule(hide_blink_float_chrome)
+  end,
+})
+vim.api.nvim_create_autocmd("User", {
+  pattern = { "BlinkCmpMenuOpen", "BlinkCmpMenuPositionUpdate" },
+  callback = function()
+    vim.schedule(hide_blink_float_chrome)
+  end,
+})
 
 -- lsp
 vim.lsp.config('clangd', {
@@ -50,18 +142,22 @@ vim.lsp.config('rust-analyzer', {
 	filetypes = {'rust'},
 	root_markers = {'Cargo.toml', 'Cargo.lock', '.git'}
 })
-vim.lsp.enable({'clangd', 'lua_ls', 'pyright', 'ols', 'rust-analyzer'})
-vim.o.autocomplete = true
-vim.api.nvim_create_autocmd('LspAttach', {
-	callback = function(ev)
-		local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-		if client:supports_method('textDocument/completion') then
-			vim.lsp.completion.enable(true, client.id, ev.buf, {autotrigger = true})
-		end
-	end
+vim.lsp.config('zls', {
+	cmd = {'zls'},
+	filetypes = {'zig'},
+	root_markers = {'build.zig', '.git'}
 })
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+})
+vim.lsp.enable({'clangd', 'lua_ls', 'pyright', 'ols', 'rust-analyzer', 'zls'})
 vim.opt.complete = {'o', '.', 'w', 'b', 'u', 't'}
-vim.opt.completeopt = {'menuone', 'noinsert'}
+vim.opt.completeopt = {'menuone', 'noinsert', 'noselect'}
 vim.diagnostic.config({
   virtual_text = {
     severity = vim.diagnostic.severity.ERROR,
@@ -80,9 +176,41 @@ vim.diagnostic.config({
 })
 
 -- colorscheme
+vim.opt.termguicolors = true
 vim.opt.background = 'dark'
+vim.cmd('syntax enable')
+vim.g.gruvbox_italic = 1
+vim.g.gruvbox_bold = 1
+vim.g.gruvbox_italicize_comments = 1
 vim.g.gruvbox_italicize_strings = 1
 vim.cmd('colorscheme gruvbox')
+
+local function apply_font_style_highlights()
+  local styles = {
+    Comment = { italic = true },
+    String = { italic = true },
+    Character = { italic = true },
+    Function = { bold = true },
+    Identifier = { bold = false },
+    Keyword = { bold = true },
+    Statement = { bold = true },
+    Type = { bold = true },
+    Constant = { bold = true },
+  }
+
+  for group, style in pairs(styles) do
+    local ok, current = pcall(vim.api.nvim_get_hl, 0, { name = group, link = false })
+    if ok and not vim.tbl_isempty(current) then
+      current.link = nil
+      vim.api.nvim_set_hl(0, group, vim.tbl_extend("force", current, style))
+    end
+  end
+end
+
+apply_font_style_highlights()
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = apply_font_style_highlights,
+})
 
 -- airline config
 vim.g.airline_powerline_fonts = 1
@@ -108,6 +236,9 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 
 -- keymaps
 local map = vim.keymap.set
+map('n', 'K', function()
+  vim.lsp.buf.hover({ border = 'rounded' })
+end, { desc = 'LSP hover' })
 map('n', 'gD', vim.lsp.buf.declaration, {})
 map('n', 'gd', vim.lsp.buf.definition, {})
 
@@ -123,6 +254,14 @@ map('n', '<space>w', '<cmd>w<CR>')
 map('n', '<space>q', '<cmd>q<CR>')
 map('n', '<C-s>', '<cmd>w<CR>')
 map('i', '<C-s>', '<ESC>:w<CR>')
+map('i', '<CR>', function()
+	local ok, cmp = pcall(require, "blink.cmp")
+	if ok and cmp.is_menu_visible() then
+		cmp.accept()
+		return ""
+	end
+	return "<CR>"
+end, { expr = true })
 map('i', 'jj', '<ESC>')
 map('i', 'kk', '<Right>')
 map('n', '<F5>', '<cmd>!make<CR>')
@@ -130,26 +269,3 @@ map('n', '<C-j>', '<C-w>j')
 map('n', '<C-k>', '<C-w>k')
 map('n', '<C-h>', '<C-w>h')
 map('n', '<C-l>', '<C-w>l')
-
--- 废弃使用的快捷键
--- vim.keymap.set("i", "<Tab>", function()
---   if vim.fn.pumvisible() == 1 then
---     return "<C-n>"
---   else
---     return "<Tab>"
---   end
--- end, { expr = true, desc = "Next completion item or normal Tab" })
--- vim.keymap.set("i", "<C-Tab>", function()
---   if vim.fn.pumvisible() == 1 then
---     return "<C-p>"
---   else
---     return "<C-Tab>"
---   end
--- end, { expr = true, desc = "Prev completion item or normal C-Tab" })
--- vim.keymap.set("i", "<Enter>", function()
---   if vim.fn.pumvisible() == 1 then
---     return "<C-y>"
---   else
---     return "<Enter>"
---   end
--- end, { expr = true, desc = "Enter to confirm choice or normal Enter" })

@@ -34,21 +34,25 @@ font-0 = CaskaydiaCove NFM;
 font-1 = simhei;
 font-2 = monospace;2  
   
-modules-left = xworkspaces xwindow  
-modules-right = filesystem pulseaudio xkeyboard memory cpu wlan eth date tray
+modules-left = xworkspaces xwindow i3 
+modules-right = filesystem pulseaudio xkeyboard memory cpu network server date tray
   
 cursor-click = pointer  
 cursor-scroll = ns-resize  
   
 enable-ipc = true  
   
-; tray-position = right  
-  
-; wm-restack = generic  
-; wm-restack = bspwm  
-; wm-restack = i3  
-  
-; override-redirect = true  
+# tray-position = right  
+# 
+# wm-restack = generic  
+# wm-restack = bspwm  
+# wm-restack = i3  
+# 
+# override-redirect = true  
+
+[module/i3]
+type = internal/i3
+format = <label-mode>
   
 [module/xworkspaces]  
 type = internal/xworkspaces  
@@ -74,15 +78,9 @@ type = internal/xwindow
 label = %title:0:30:...%  
   
 [module/filesystem]  
-type = internal/fs  
-interval = 25  
-  
-mount-0 = /  
-  
-label-mounted = %{F#6CAFCE}%mountpoint%%{F-} %used%/%total%  
-  
-label-unmounted = %mountpoint% not mounted  
-label-unmounted-foreground = ${colors.disabled}  
+type = custom/script
+interval = 25
+exec = /home/maii/.config/polybar/filesystem.sh
   
 [module/pulseaudio]  
 type = internal/pulseaudio  
@@ -109,18 +107,32 @@ label-muted-foreground = ${colors.disabled}
 ; label-indicator-background = ${colors.secondary}  
   
 [module/memory]  
-type = internal/memory  
-interval = 2  
+type = custom/script
+interval = 2
+exec = /home/maii/.config/polybar/memory.sh
 format-prefix = "RAM "  
 format-prefix-foreground = ${colors.primary}  
-label = %used%/%total%  
   
 [module/cpu]  
-type = internal/cpu  
-interval = 2  
-format-prefix = "CPU "  
-format-prefix-foreground = ${colors.primary}  
-label = %percentage:2%%  
+type = custom/ipc
+hook-0 = /home/maii/.config/polybar/cpu.sh
+initial = 1
+click-left = /home/maii/.config/polybar/cpu.sh --toggle %pid%
+
+[module/temperature]
+type = internal/temperature
+interval = 2
+thermal-zone = 0
+warn-temperature = 80
+
+format-prefix = "TEMP "
+format-prefix-foreground = ${colors.primary}
+label = %temperature-c%
+
+format-warn-prefix = "TEMP "
+format-warn-prefix-foreground = ${colors.alert}
+label-warn = %temperature-c%
+label-warn-foreground = ${colors.alert}
   
 [network-base]  
 type = internal/network  
@@ -138,7 +150,21 @@ label-connected = %{F#4FC1E9}%ifname%%{F-} %essid% %local_ip%
 inherit = network-base 
 interface-type = wired 
 label-connected = %{F#4FC1E9}%local_ip%%{F-} ↑%upspeed% ↓%downspeed%   
-  
+
+[module/network]
+type = custom/ipc
+hook-0 = /home/maii/.config/polybar/network.sh
+initial = 1
+click-left = /home/maii/.config/polybar/network.sh --toggle %pid%
+
+[module/server]
+type = custom/ipc
+hook-0 = /home/maii/.config/polybar/server.sh
+initial = 1
+click-left = /home/maii/.config/polybar/server.sh --toggle %pid%
+click-right = /home/maii/.config/polybar/server.sh --refresh %pid%
+click-middle = /home/maii/.config/polybar/server.sh --diagnose
+
 [module/date]  
 type = internal/date  
 interval = 1  
