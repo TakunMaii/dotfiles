@@ -1,0 +1,53 @@
+{
+  "plugins": {
+    "blink.cmp": {
+      "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
+      "src": "https://github.com/Saghen/blink.cmp",
+      "version": "1.0.0 - 2.0.0"
+    },
+    "friendly-snippets": {
+      "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
+      "src": "https://github.com/rafamadriz/friendly-snippets"
+    },
+    "gruvbox": {
+      "rev": "5d15b2765f59754d7ac263c88a0f6e3e58124951",
+      "src": "https://github.com/morhetz/gruvbox"
+    },
+    "nvim-autopairs": {
+      "rev": "7b9923abad60b903ece7c52940e1321d39eccc79",
+      "src": "https://github.com/windwp/nvim-autopairs"
+    },
+    "nvim-tree.lua": {
+      "rev": "b2aadda94b107480c48e548d6db51c6840b7b33c",
+      "src": "https://github.com/nvim-tree/nvim-tree.lua"
+    },
+    "nvim-treesitter": {
+      "rev": "8b98b4470eb326f1c7b50dae79f8c963568e5720",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "plenary.nvim": {
+      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "telescope.nvim": {
+      "rev": "427b576c16792edad01a92b89721d923c19ad60f",
+      "src": "https://github.com/nvim-telescope/telescope.nvim"
+    },
+    "vim-airline": {
+      "rev": "a2fefe599378b4a493287d10501f51e224753690",
+      "src": "https://github.com/vim-airline/vim-airline"
+    },
+    "vim-commentary": {
+      "rev": "64a654ef4a20db1727938338310209b6a63f60c9",
+      "src": "https://github.com/tpope/vim-commentary"
+    },
+    "vim-easymotion": {
+      "rev": "b3cfab2a6302b3b39f53d9fd2cd997e1127d7878",
+      "src": "https://github.com/easymotion/vim-easymotion"
+    },
+    "vim-visual-multi": {
+      "rev": "a6975e7c1ee157615bbc80fc25e4392f71c344d4",
+      "src": "https://github.com/mg979/vim-visual-multi"
+    }
+  }
+}

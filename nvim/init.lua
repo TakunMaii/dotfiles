@@ -23,6 +23,7 @@ vim.pack.add({
   { src = 'https://github.com/Saghen/blink.cmp', version = vim.version.range('1.*') },
   { src = 'https://github.com/rafamadriz/friendly-snippets' },
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+  { src = 'https://github.com/easymotion/vim-easymotion' },
 })
 
 -- setup as it requires
@@ -60,14 +61,14 @@ require("blink.cmp").setup({
       auto_show_delay_ms = 250,
       treesitter_highlighting = true,
       window = {
-        border = "rounded",
+        border = "none",
       },
     },
     ghost_text = {
       enabled = true,
     },
     menu = {
-      border = "rounded",
+      border = "none",
       draw = {
         columns = {
           { "kind_icon" },
@@ -80,7 +81,7 @@ require("blink.cmp").setup({
   signature = {
     enabled = true,
     window = {
-      border = "rounded",
+      border = "none",
       treesitter_highlighting = true,
     },
   },
@@ -90,32 +91,6 @@ require("blink.cmp").setup({
   fuzzy = {
     implementation = "lua",
   },
-})
-local function hide_blink_float_chrome()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local filetype = vim.bo[buf].filetype
-    if filetype:match("^blink%-cmp") then
-      local config = vim.api.nvim_win_get_config(win)
-      if config.relative ~= "" then
-        config.style = "minimal"
-        pcall(vim.api.nvim_win_set_config, win, config)
-        vim.wo[win].statusline = " "
-        vim.wo[win].winbar = ""
-      end
-    end
-  end
-end
-vim.api.nvim_create_autocmd({ "WinNew", "WinEnter" }, {
-  callback = function()
-    vim.schedule(hide_blink_float_chrome)
-  end,
-})
-vim.api.nvim_create_autocmd("User", {
-  pattern = { "BlinkCmpMenuOpen", "BlinkCmpMenuPositionUpdate" },
-  callback = function()
-    vim.schedule(hide_blink_float_chrome)
-  end,
 })
 
 -- lsp
@@ -239,21 +214,6 @@ local map = vim.keymap.set
 map('n', 'K', function()
   vim.lsp.buf.hover({ border = 'rounded' })
 end, { desc = 'LSP hover' })
-map('n', 'gD', vim.lsp.buf.declaration, {})
-map('n', 'gd', vim.lsp.buf.definition, {})
-
-map("n", "<leader>ff", ":Telescope find_files<CR>")
-map("n", "<leader>fs", ":Telescope live_grep<CR>")
-map("n", "<leader>fb", ":Telescope buffers<CR>")
-
--- my own keymaps
-map('n', '<space>b', ':buffers<CR>:b ')
-map('n', '<space>s', '<cmd>b#<CR>')
-map('n', '<space>e', '<cmd>NvimTreeToggle<CR>')
-map('n', '<space>w', '<cmd>w<CR>')
-map('n', '<space>q', '<cmd>q<CR>')
-map('n', '<C-s>', '<cmd>w<CR>')
-map('i', '<C-s>', '<ESC>:w<CR>')
 map('i', '<CR>', function()
 	local ok, cmp = pcall(require, "blink.cmp")
 	if ok and cmp.is_menu_visible() then
@@ -262,9 +222,36 @@ map('i', '<CR>', function()
 	end
 	return "<CR>"
 end, { expr = true })
+
+vim.cmd([[
+  let g:EasyMotion_do_mapping = 0
+  nmap <leader>mf <Plug>(easymotion-overwin-f)
+  nmap <leader>ms <Plug>(easymotion-overwin-f2)
+  nmap <leader>ml <Plug>(easymotion-overwin-line)
+  nmap <leader>mw <Plug>(easymotion-overwin-w)
+]])
+
+map('n', 'gD', vim.lsp.buf.declaration, {})
+map('n', 'gd', vim.lsp.buf.definition, {})
+map('n', 'gr', vim.lsp.buf.references, {})
+
+map('n', '<leader>lf', vim.lsp.buf.format, {})
+map('n', '<leader>lr', vim.lsp.buf.rename, {})
+
+map("n", "<leader>ff", ":Telescope find_files<CR>")
+map("n", "<leader>fs", ":Telescope live_grep<CR>")
+map("n", "<leader>fb", ":Telescope buffers<CR>")
+
+map('n', '<space>b', ':b ')
+map('n', '<space>r', ':!')
+map('n', '<space>s', '<cmd>b#<CR>')
+map('n', '<space>e', '<cmd>NvimTreeToggle<CR>')
+map('n', '<space>w', '<cmd>w<CR>')
+map('n', '<space>q', '<cmd>q<CR>')
+map('n', '<C-s>', '<cmd>w<CR>')
+map('i', '<C-s>', '<ESC>:w<CR>')
 map('i', 'jj', '<ESC>')
 map('i', 'kk', '<Right>')
-map('n', '<F5>', '<cmd>!make<CR>')
 map('n', '<C-j>', '<C-w>j')
 map('n', '<C-k>', '<C-w>k')
 map('n', '<C-h>', '<C-w>h')
