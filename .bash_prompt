@@ -1,29 +1,112 @@
 force_color_prompt=yes
 
+function __prompt_git_info() {
+    git rev-parse --is-inside-work-tree > /dev/null 2>&1 || return
+
+    local branch
+    branch="$(git branch --show-current 2>/dev/null)"
+    if [ -z "$branch" ]; then
+        branch="$(git rev-parse --short HEAD 2>/dev/null)"
+    fi
+
+    local upstream ahead behind
+    upstream="$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null)"
+    if [ -n "$upstream" ]; then
+        local counts
+        counts="$(git rev-list --left-right --count HEAD..."$upstream" 2>/dev/null)"
+        ahead="${counts%%	*}"
+        behind="${counts##*	}"
+    fi
+
+    local staged=0
+    local modified=0
+    local untracked=0
+    local line x y
+    while IFS= read -r line; do
+        x="${line:0:1}"
+        y="${line:1:1}"
+
+        if [ "$x" = "?" ]; then
+            untracked=$((untracked + 1))
+            continue
+        fi
+
+        [ "$x" != " " ] && staged=$((staged + 1))
+        [ "$y" != " " ] && modified=$((modified + 1))
+    done < <(git status --porcelain 2>/dev/null)
+
+    local details=""
+    [ "${ahead:-0}" -gt 0 ] && details="${details} ⇡${ahead}"
+    [ "${behind:-0}" -gt 0 ] && details="${details} ⇣${behind}"
+    [ "$staged" -gt 0 ] && details="${details} +${staged}"
+    [ "$modified" -gt 0 ] && details="${details} ~${modified}"
+    [ "$untracked" -gt 0 ] && details="${details} ?${untracked}"
+
+    if [ -z "$details" ]; then
+        details=" ✓"
+    fi
+
+    printf '%s%s' "$branch" "$details"
+}
+
+function __prompt_env_info() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        printf '%s' "${VIRTUAL_ENV##*/}"
+    elif [ -n "$CONDA_DEFAULT_ENV" ]; then
+        printf '%s' "$CONDA_DEFAULT_ENV"
+    fi
+}
+
+function __prompt_jobs_info() {
+    local count=0
+    local job
+    while IFS= read -r job; do
+        [ -n "$job" ] && count=$((count + 1))
+    done < <(jobs -pr 2>/dev/null)
+
+    [ "$count" -gt 0 ] && printf '%s' "$count"
+}
+
 function prompt_command() {
     local last_exit_code=$?
+    local bold="\[\e[1m\]"
+    local italic="\[\e[3m\]"
+    local dim="\[\e[2m\]"
     local time_color="\[\e[36m\]"
     local user_color="\[\e[32m\]"
     local host_color="\[\e[34m\]"
     local dir_color="\[\e[33m\]"
     local git_color="\[\e[35m\]"
+    local env_color="\[\e[38;5;208m\]"
+    local jobs_color="\[\e[38;5;111m\]"
+    local error_color="\[\e[31m\]"
     local reset_color="\[\e[0m\]"
 
     local status_indicator=""
-    [ $last_exit_code -eq 0 ] && status_indicator="" || status_indicator=" ERROR|"
+    [ "$last_exit_code" -eq 0 ] || status_indicator=" ${error_color}${bold}󰅙 ${last_exit_code}${reset_color}"
 
-    local current_time="${time_color}At \t"
+    local current_time="${time_color}${italic}󰥔\t${reset_color}"
 
-    local user_host="$user_color\u@\h"
+    local user_host="${user_color}${bold}\u${reset_color}${dim}@${reset_color}${host_color}${bold}󰒋\h${reset_color}"
 
-    local current_dir="$dir_color\w"
+    local current_dir="${dir_color}${italic}\w${reset_color}"
+
+    local env_info=""
+    local env_name
+    env_name="$(__prompt_env_info)"
+    [ -n "$env_name" ] && env_info=" ${env_color}${bold} ${env_name}${reset_color}"
+
+    local jobs_info=""
+    local jobs_count
+    jobs_count="$(__prompt_jobs_info)"
+    [ -n "$jobs_count" ] && jobs_info=" ${jobs_color}${bold} ${jobs_count}${reset_color}"
 
     local git_branch=""
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        git_branch="$git_color \$(git branch --show-current 2>/dev/null)"
+        git_branch=" ${git_color}${bold} $(__prompt_git_info)${reset_color}"
     fi
 
-    PS1="${user_host}:${current_dir}${git_branch}${reset_color}\n\$ "
+    PS1="${current_time} ${user_host} ${current_dir}${env_info}${git_branch}${jobs_info}${status_indicator}${reset_color}\n${bold}❯${reset_color} "
 }
 
 PROMPT_COMMAND=prompt_command
