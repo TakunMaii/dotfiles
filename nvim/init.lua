@@ -21,32 +21,12 @@ vim.pack.add({
   { src = 'https://github.com/nvim-telescope/telescope.nvim' },
   { src = 'https://github.com/nvim-lua/plenary.nvim' },
   { src = 'https://github.com/Saghen/blink.cmp', version = vim.version.range('1.*') },
-  { src = 'https://github.com/rafamadriz/friendly-snippets' },
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/easymotion/vim-easymotion' },
 })
 
 -- setup as it requires
 require("nvim-tree").setup()
 require("nvim-autopairs").setup()
-local treesitter_langs = {
-  "c",
-  "cpp",
-  "lua",
-  "markdown",
-  "markdown_inline",
-  "python",
-  "rust",
-  "zig",
-}
-require("nvim-treesitter").setup()
-require("nvim-treesitter").install(treesitter_langs)
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = treesitter_langs,
-  callback = function()
-    pcall(vim.treesitter.start)
-  end,
-})
 require("blink.cmp").setup({
   keymap = {
     preset = "default",
