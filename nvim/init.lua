@@ -79,6 +79,16 @@ vim.lsp.config('clangd', {
 	filetypes = {'c', 'cpp'},
 	root_markers = {'.clangd', '.git'}
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp' },
+  callback = function(ev)
+    vim.bo[ev.buf].tabstop = 4
+    vim.bo[ev.buf].softtabstop = 4
+    vim.bo[ev.buf].shiftwidth = 4
+    vim.bo[ev.buf].expandtab = true
+  end,
+})
 vim.lsp.config('lua_ls', {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
@@ -215,7 +225,18 @@ map('n', 'gD', vim.lsp.buf.declaration, {})
 map('n', 'gd', vim.lsp.buf.definition, {})
 map('n', 'gr', vim.lsp.buf.references, {})
 
-map('n', '<leader>lf', vim.lsp.buf.format, {})
+map('n', '<leader>lf', function()
+  if vim.bo.filetype == 'c' or vim.bo.filetype == 'cpp' then
+    vim.lsp.buf.format({
+      formatting_options = {
+        tabSize = 4,
+        insertSpaces = true,
+      },
+    })
+    return
+  end
+  vim.lsp.buf.format()
+end, {})
 map('n', '<leader>lr', vim.lsp.buf.rename, {})
 
 map("n", "<leader>ff", ":Telescope find_files<CR>")
