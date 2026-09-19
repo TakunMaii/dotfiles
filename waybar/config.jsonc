@@ -1,13 +1,15 @@
 {
+  "ipc": true,
   "layer": "top",
   "position": "top",
-  "height": 32,
+  "height": 16,
   "spacing": 0,
   "modules-left": [
-    "hyprland/workspaces",
+    "sway/workspaces",
+    "sway/mode",
     "tray",
   ],
-  "modules-center": ["hyprland/window"],
+  // "modules-center": ["sway/window"],
   "modules-right": [
     "network",
     "battery",
@@ -105,7 +107,7 @@
     "tooltip-format": "{:L%Y 年 %m 月 %d 日, %A}"
   },
   "tray": {
-    "icon-size": 17,
+    "icon-size": 16,
     "spacing": 6
   },
   "backlight": {
